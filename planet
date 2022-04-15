@@ -37,21 +37,20 @@ string interactBaker(Room* room){
     return output;
 }
 
-string interactChineseRestaurant(Room*){
+string interactRestaurant(Room*){
     string output = "";
 
     if(ZorkUL::getMoney() >= 10){
         ZorkUL::changeMoney(-10);
-        Item* food = new Item(&(useItemFunctions::useItemDefault), "Guo Bao Rou", ItemDialogues::guoBaoRou);
+        Item* food = new Item(&(useItemFunctions::useItemDefault), "Chcicken", ItemDialogues::chicken);
         ZorkUL::addItem(food);
-        output += "You fork over some money,"
-                  " wondering what in the world this \"Guo Bao Rou\" is."
-                  " \"Thank you very much for your business! We hope you enjoy!\"";
+        output += "You hand in cash, and you think,"
+                  " I don't even like \"Chicken\"
+                  " \"Thank you very much! Enjoy your meal!\"";
     }
     else{
-        output += "\"Emm... I'm afraid you don't have the money to"
-                  " sample our delicious Guo Bao Rou, little boy,\" said"
-                  " the person at the counter.";
+        output += "\"I don't think theres enough in that"
+                  " would you like to see our other options?"
     }
 
     return output;
@@ -75,8 +74,8 @@ string interactCave(GoalRoom* room){
     }
 }
 
-string interactParadise(Room*){
-    return InteractDialogues::paradiseInteract;
+string interactPlanet(Room*){
+    return InteractDialogues::planetInteract;
 }
 }
 
@@ -234,11 +233,11 @@ Item* RewardRoom::giveItemReward(){
     return reward;
 }
 
-WordleRoom::WordleRoom(string(*interactFunc)(GoalRoom*), int moneyReward, string name, string description, string backgroundPath,
+WordleRoom::WordleRoom(string(*interactFunc)(GoalRoom*), int cashReward, string name, string description, string backgroundPath,
                        typeOfRoom typeOfRoom, bool hasHiddenItem, bool goalCompleted)
     : GoalRoom(interactFunc, name, description, backgroundPath, typeOfRoom, hasHiddenItem, goalCompleted){
-    this->rewardType = MONEY;
-    this->RewardRoom::rewardMoney = moneyReward;
+    this->rewardType = CASH;
+    this->RewardRoom::rewardCash = cashReward;
     this->interactFunc = interactFunc;
 }
 
@@ -291,8 +290,7 @@ string Room::exitString() {
 }
 
 Room* Room::nextRoom(string direction) {
-
-    map<string, Room*>::iterator next = exits.find(direction); //returns an iterator for the "pair"
+//returns an iterator for the "pair"
     if (next == exits.end())
         return NULL; // if exits.end() was returned, there's no room in that direction.
     return next->second; // If there is a room, remove the "second" (Room*)
@@ -373,7 +371,7 @@ vector<Item*> Room::getAllItems(){
 
 string GoalRoom::getLongDescription(){
     if(!this->goalCompleted){
-        return Room::getLongDescription() + "\nThere seems to be a objective to be completed here...\n";
+        return Room::getLongDescription() + "\nThere's an objective to be completed here\n";
 
     }
     else{
@@ -391,15 +389,15 @@ string checkPlainFunc(GoalRoom* room){
     return "";
 }
 
-string checkPeiCompleteFunc(GoalRoom* currentRoom){
+string checkPlanetCompleteFunc(GoalRoom* currentRoom){
     string output = "";
-    string goalItem = "frog";
+    string goalItem = "muffin";
 
     // I want to remove a particular item from the list that matches the name of the goal item.
     if(currentRoom->deleteItemByName(goalItem)){
         currentRoom->setGoalStatus(true);
         output += CompletionDialogues::peiComplete;
-        ZorkUL::changeMoney(1000);
+        ZorkUL::changeCash(1000);
 
     }
 
@@ -426,7 +424,7 @@ string checkCafeCompleteFunc(GoalRoom* currentRoom){
 
 string checkCaveCompleteFunc(GoalRoom* currentRoom){
     string output = "";
-    string goalItem = "guo bao rou";
+    string goalItem = "chicken";
 
     if(currentRoom->deleteItemByName(goalItem)){
         currentRoom->setGoalStatus(true);
