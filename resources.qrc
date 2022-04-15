@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/text">
+        <file>wordle_words.txt</file>
+    </qresource>
+    <qresource prefix="/img">
+        <file>img/solar_system.png</file>
+        <file>img/mercury.png</file>
+        <file>img/venus.png</file>
+        <file>img/earth.png</file>
+        <file>img/mars.png</file>
+        <file>img/jupiter.png</file>
+        <file>img/saturn.png</file>
+        <file>img/uranus.png</file>
+        <file>img/neptune.png</file>
+        <file>img/pluto.png</file>
+    </qresource>
+</RCC>
