@@ -19,13 +19,13 @@ Room *ZorkUL::currentRoom;
 Quantities *ZorkUL::allQuantities;
 vector<Item*> ZorkUL::itemsInInventory;
 bool ZorkUL::keysPresent[5];
-int ZorkUL::money;
+int ZorkUL::cash;
 vector<Room*> ZorkUL::allRooms;
 Stack<Room*> ZorkUL::recentRooms;
-bool ZorkUL::canGoToParadise;
+bool ZorkUL::canGoToSpace;
 
 int main(int argc, char *argv[]) {
-    ZorkUL::changeMoney(2);
+    ZorkUL::changeCash(2);
 
     //ZorkUL::parser = new Parser();
     Parser* parser = new Parser();
@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
     // For printing stuff out in the output pane and debugging
     //QTextStream out(stdout);
 
-    WordleEngine *worldleEngine = new WordleEngine();
+    WordleMachine *worldleMachine = new WordleMachine();
     QApplication a(argc, argv);
     MainWindow w;
     w.setWindowState(Qt::WindowMaximized);
@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
     w.clearConsole();
 
     // For testing that all valid Wordle words are present.
-    //    for (string s : worldleEngine->getAllWords()){
+    //    for (string s : worldleMachine->getAllWords()){
     //        w.addToConsole(s);
     //    }
 
@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
     string roomDescription = ZorkUL::getCurrentRoom()->getShortDescription();
     w.addStringToConsole(Dialogues::printCurrentRoom(roomDescription));
 
-    delete worldleEngine;
+    delete worldleMachine;
     delete ZorkUL::getParser();
     return a.exec();
 }
@@ -68,9 +68,8 @@ ZorkUL::ZorkUL() {
         this->keysPresent[i] = false;
     }
     ZorkUL::allQuantities->KeysPresent = 0;
-    ZorkUL::allQuantities->Bombs = 0;
     ZorkUL::money = 10;
-    ZorkUL::canGoToParadise = false;
+    ZorkUL::canGoToSpace = false;
 
     createRooms();
 }
@@ -83,7 +82,7 @@ vector<Room*> ZorkUL::getAllRooms(){
     return ZorkUL::allRooms;
 }
 
-// Cleaning up heap stuff
+// Cleaning up heaps
 void ZorkUL::deleteAll(){
     currentRoom = NULL;
 
@@ -106,10 +105,10 @@ vector<Room*> ZorkUL::createRooms()  {
     using namespace InteractFunctions;
     using namespace useItemFunctions;
 
-    Room *city_centre, *chinese_restaurant,
-            *claw_machine, *conveyor_sushi, *lively_alley, *noodle_stall,
-            *under_bridge;
-    GoalRoom *sewer_a, *pei_street, *train, *cafe, *train_station, *cave;
+    Room *solar_system, *mercury,
+            *venus, *earth, *mars, *jupiter,
+            *saturn;
+    GoalRoom *uranus, *neptune, *pluto;
 
     Item *frog, *weird_magazine, *pen;
     frog = new Item(&(useItemDefault), "Frog", ItemDialogues::frog);
