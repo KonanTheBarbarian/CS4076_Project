@@ -3,7 +3,6 @@
 #include "ZorkUL.h"
 
 #include <string.h>
-#include "dialogues.h"
 
 
 namespace InteractFunctions{
@@ -206,12 +205,11 @@ bool GoalRoom::getGoalStatus(){
 RewardRoom::RewardRoom(){}
 RewardRoom::~RewardRoom(){}
 
-// For giving monetary reward
-int RewardRoom::giveMoneyReward(){
+int RewardRoom::giveCashReward(){
     int reward = 0;
-    if(this->rewardType == MONEY){
-        reward = this->rewardMoney;
-        this->rewardMoney = 0;
+    if(this->rewardType == CASH){
+        reward = this->rewardCash;
+        this->rewardCash = 0;
     }
     return reward;
 }
@@ -371,11 +369,11 @@ vector<Item*> Room::getAllItems(){
 
 string GoalRoom::getLongDescription(){
     if(!this->goalCompleted){
-        return Room::getLongDescription() + "\nThere's an objective to be completed here\n";
+        return Room::getLongDescription() + "\nThere's something to be done here\n";
 
     }
     else{
-        return Room::getLongDescription() + "\nThe objective in the room is completed.\n";
+        return Room::getLongDescription() + "\nIt's done and dusted!.\n";
 
     }
 }
@@ -389,11 +387,11 @@ string checkPlainFunc(GoalRoom* room){
     return "";
 }
 
-string checkPlanetCompleteFunc(GoalRoom* currentRoom){
+string checkMercuryCompleteFunc(GoalRoom* currentRoom){
     string output = "";
-    string goalItem = "muffin";
+    string goalItem = "rock";
 
-    // I want to remove a particular item from the list that matches the name of the goal item.
+    // Remove a particular item from the list that matches the name of the goal item.
     if(currentRoom->deleteItemByName(goalItem)){
         currentRoom->setGoalStatus(true);
         output += CompletionDialogues::peiComplete;
@@ -404,14 +402,14 @@ string checkPlanetCompleteFunc(GoalRoom* currentRoom){
     return output;
 }
 
-string checkCafeCompleteFunc(GoalRoom* currentRoom){
+string checkEarthCompleteFunc(GoalRoom* currentRoom){
     string output = "";
-    string goalItem = "pen";
+    string goalItem = "stylus";
 
     if(currentRoom->deleteItemByName(goalItem)){
         currentRoom->setGoalStatus(true);
-        output += CompletionDialogues::cafeComplete;
-        ZorkUL::changeMoney(2);
+        output += CompletionDialogues::earthComplete;
+        ZorkUL::changeCash(2);
     }
 
     if(currentRoom->getGoalStatus() == false){
@@ -422,15 +420,15 @@ string checkCafeCompleteFunc(GoalRoom* currentRoom){
     return output;
 }
 
-string checkCaveCompleteFunc(GoalRoom* currentRoom){
+string checkVenusCompleteFunc(GoalRoom* currentRoom){
     string output = "";
-    string goalItem = "chicken";
+    string goalItem = "sweets";
 
     if(currentRoom->deleteItemByName(goalItem)){
         currentRoom->setGoalStatus(true);
-        output += CompletionDialogues::caveComplete;
-        Item* orb = new Item(&(useItemFunctions::useOrb), "Orb", ItemDialogues::orb);
-        ZorkUL::addItem(orb);
+        output += CompletionDialogues::venusComplete;
+        Item* sweets = new Item(&(useItemFunctions::useSweets), "sweets", ItemDialogues::sweets);
+        ZorkUL::addItem(sweets);
     }
 
     return output;
@@ -439,7 +437,7 @@ string checkCaveCompleteFunc(GoalRoom* currentRoom){
 string checkFinalGoalFunc(GoalRoom* room){
     string output = "";
 
-    if(ZorkUL::getMoney() >= ZorkUL::getGoalMoney()){
+    if(ZorkUL::getCash() >= ZorkUL::getGoalCash()){
         room->setGoalStatus(true);
         output += CompletionDialogues::finalGoalComplete;
     }
