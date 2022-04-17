@@ -133,19 +133,15 @@ vector<Room*> ZorkUL::createRooms()  {
 
     // Setting exits for each room
     //             (N, E, S, W)
-    mercury->setExits(venus, earth, mars, jupiter);
-    venus->setExits(city_centre, NULL, NULL, NULL);
-    train_station->setExits(NULL, train, NULL, city_centre);
-    train->setExits(NULL, NULL, NULL, train_station);
-    pei_street->setExits(cafe, chinese_restaurant, city_centre, claw_machine);
-    chinese_restaurant->setExits(NULL, NULL, NULL, pei_street);
-    cafe->setExits(NULL, NULL, pei_street, NULL);
-    cave->setExits(under_bridge, NULL, NULL, NULL);
-    claw_machine->setExits(conveyor_sushi, pei_street, noodle_stall, lively_alley);
-    conveyor_sushi->setExits(NULL, NULL, claw_machine, NULL);
-    lively_alley->setExits(NULL, claw_machine, NULL, NULL);
-    noodle_stall->setExits(claw_machine, NULL, NULL, NULL);
-    under_bridge->setExits(NULL, city_centre, cave, NULL);
+    mercury->setExits(venus, earth, NULL, mars);
+    venus->setExits(uranus, neptune, mercury, saturn);
+    earth->setExits(saturn, mars, NULL, jupiter);
+    mars->setExits(neptune, pluto, NULL, mercury);
+    jupiter->setExits(NULL, earth, NULL, NULL);
+    saturn->setExits(NULL, venus, earth, NULL);
+    uranus->setExits(NULL, NULL, venus, NULL);
+    neptune->setExits(NULL, NULL, mars, venus);
+    pluto->setExits(NULL, mars, NULL, NULL);
 
     allRooms.push_back(solar_system);
     allRooms.push_back(mercury);
