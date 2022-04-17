@@ -5,7 +5,7 @@ class NoRoomError
 {
 public:
     const char* what(){
-        return "Wait, we shouldn't be here/ Lets go this way maybe?\n";
+        return "Hang on, we shouldn't be here/ Go this way instead?\n";
     }
 };
 
