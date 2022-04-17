@@ -118,26 +118,23 @@ vector<Room*> ZorkUL::createRooms()  {
     vector<Room*> allRooms;
     // Adding all rooms
     mercury = new Room("Mercury", RoomDialogues::mercury, MERCURY_PIC
-    solar_systeactPlainGoal), 100, "Sewers", RoomDialogues::sewers, SEWER_GIF);
-    train = new WordleRoom(&(interactPlainGoal), pen, "Train", RoomDialogues::train, TRAIN_GIF);
-    train_station = new GoalRoom(&(interactPlainGoal), &(checkFinalGoalFunc),"Station", "", STATION_PIC);
-    pei_street = new GoalRoom(&(interactPlainGoal), &(checkPeiCompleteFunc),"Pei Street", "The northern street.", BUSY_STREET);
-    chinese_restaurant = new Room(&(interactChineseRestaurant), "Chinese Restaurant", RoomDialogues::chineseRestaurant, CHINESE_RESTAURANT_PIC);
-    cafe = new GoalRoom(&(interactCafe), &(checkCafeCompleteFunc), "Cafe", RoomDialogues::cafe, CAFE);
-    cave = new GoalRoom(&(interactCave), &(checkCaveCompleteFunc), "Cave", RoomDialogues::cave, CAVE_PIC);
-    claw_machine = new Room(&(interactClawMachine), "Alley with Claw Machine", RoomDialogues::clawMachine, CLAW_MACHINE);
-    conveyor_sushi = new Room(&(interactPlain), "Conveyor Sushi Restaurant", RoomDialogues::conveyorSushi, CONVEYOR_SUSHI);
-    lively_alley = new Room(&(interactPlain), "Lively alley", RoomDialogues::livelyAlley, LIVELY_ALLEY);
-    noodle_stall = new Room(&(interactPlain), "Noodle Stall", RoomDialogues::noodleStall, NOODLE_STALL);
-    under_bridge = new Room(&(interactPlain), "Bridge", RoomDialogues::underBridge, UNDER_BRIDGE);
-
-    *city_centre + frog;
-    *pei_street + weird_magazine;
+    venus = new inteactPlainGoal), 100, "Venus", RoomDialogues::venus, VENUS_PIC);
+    solar_system = new WordleRoom(&(interactPlainGoal), rock, "Solar System", RoomDialogues::solar_system, SOLAR_SYSTEM_PIC);
+    uranus = new GoalRoom(&(interactPlainGoal), &(checkFinalGoalFunc),"Uranus", URANUS_PIC);
+    neptune = new GoalRoom(&(interactPlainGoal), &(checkPeiCompleteFunc),"Neptune", NEPTUNE_PIC);
+    earth = new Room(&(interactPlain), "Earth", RoomDialogues::earth, EARTH_PIC);
+    mars = new Room(&(interactPlain), "Mars", RoomDialogues::mars, MARS_PIC);
+    jupiter = new Room(&(interactPlain), "Jupiter", RoomDialogues::jupiter, JUPITER_PIC);
+    saturn = new Room(&(interactPlain), "Saturn", RoomDialogues::saturn, SATURN_PIC);
+    pluto = new Room(&(interactPlain), "Pluto", RoomDialogues::pluto, PLUTO_PIC);
+    
+    *mercury + rock;
+    *earth + stylus;
 
     // Setting exits for each room
     //             (N, E, S, W)
-    city_centre->setExits(pei_street, train_station, sewer_a, under_bridge);
-    sewer_a->setExits(city_centre, NULL, NULL, NULL);
+    mercury->setExits(venus, earth, mars, jupiter);
+    venus->setExits(city_centre, NULL, NULL, NULL);
     train_station->setExits(NULL, train, NULL, city_centre);
     train->setExits(NULL, NULL, NULL, train_station);
     pei_street->setExits(cafe, chinese_restaurant, city_centre, claw_machine);
@@ -150,22 +147,19 @@ vector<Room*> ZorkUL::createRooms()  {
     noodle_stall->setExits(claw_machine, NULL, NULL, NULL);
     under_bridge->setExits(NULL, city_centre, cave, NULL);
 
-    allRooms.push_back(city_centre);
-    allRooms.push_back(sewer_a);
-    allRooms.push_back(train_station);
-    allRooms.push_back(train);
-    allRooms.push_back(pei_street);
-    allRooms.push_back(chinese_restaurant);
-    allRooms.push_back(cafe);
-    allRooms.push_back(cave);
-    allRooms.push_back(claw_machine);
-    allRooms.push_back(conveyor_sushi);
-    allRooms.push_back(lively_alley);
-    allRooms.push_back(noodle_stall);
-    allRooms.push_back(under_bridge);
+    allRooms.push_back(solar_system);
+    allRooms.push_back(mercury);
+    allRooms.push_back(venus);
+    allRooms.push_back(earth);
+    allRooms.push_back(mars);
+    allRooms.push_back(jupiter);
+    allRooms.push_back(saturn);
+    allRooms.push_back(uranus);
+    allRooms.push_back(neptune);
+    allRooms.push_back(pluto);
 
     // Start off at this room.
-    currentRoom = train_station;
+    currentRoom = mercury;
 
     return allRooms;
 }
@@ -180,14 +174,14 @@ void deleteAllRooms(){
 string ZorkUL::processCommand(Command& command, MainWindow *window) {
     string output = "";
     // If we're in a Wordle game, treat the input as a Wordle attempt
-    if(WordleEngine::getWordleStatus() == WordleEngine::WORDLE_PROGRESS){
-        output += WordleEngine::evaluateInput(command.getCommandWord());
+    if(WordleMachine::getWordleStatus() == WordleMachine::WORDLE_PROGRESS){
+        output += WordleMachine::evaluateInput(command.getCommandWord());
 
-        if(WordleEngine::getWordleStatus() == WordleEngine::WORDLE_PROGRESS){
+        if(WordleMachine::getWordleStatus() == WordleMachine::WORDLE_PROGRESS){
             return output;
         }
         // If it's a success, give the reward of that particular room
-        else if(WordleEngine::getWordleStatus() == WordleEngine::WORDLE_SUCCESS){
+        else if(WordleMachine::getWordleStatus() == WordleMachine::WORDLE_SUCCESS){
             output += ZorkUL::giveReward();
         }
     }
@@ -206,9 +200,9 @@ string ZorkUL::processCommand(Command& command, MainWindow *window) {
     }
 
     else if (compareIgnoreCase(commandWord, "go")){
-        if(compareIgnoreCase(currentRoom->getName(), "paradise")){
-            return "You are already in paradise. There is nowhere that you"
-                   " need to go.";
+        if(compareIgnoreCase(currentRoom->getName(), "space")){
+            return "You are all spaced out. Stay where"
+                   " you are.";
         }
 
         try{
@@ -236,15 +230,15 @@ string ZorkUL::processCommand(Command& command, MainWindow *window) {
 
     else if (compareIgnoreCase(commandWord, "use")){
         if(!command.hasSecondWord()){
-            output += "What the hell do you want to use, punk?!";
-            //return "What the hell do you want to use, punk?!";
+            output += "What are you using at all?!";
+            //return "What are you using at all?!";
         }
         else{
             int location = findItemIndex(command.getSecondWord());
 
             if(location == -1){
-                output += "Item not in inventory.";
-                //return "Item not in inventory.";
+                output += "Item is not in your inventory.";
+                //return "Item is not in your inventory.";
             }
             else{
                 Item* itemToBeUsed = itemsInInventory.at(location);
@@ -263,19 +257,19 @@ string ZorkUL::processCommand(Command& command, MainWindow *window) {
     else if (compareIgnoreCase(commandWord, "take"))
     {
         if (!command.hasSecondWord()) {
-            output += "What the hell do you want to take, punk?!\n";
+            output += "Are ya trying to take something with ya?!\n";
 
-            //            return "What the hell do you want to take, punk?!\n";
+            //            return "Are ya trying to take something with ya?!\n";
         }
         else{
             output += "You're trying to take " + command.getSecondWord() + "\n";
             int location = currentRoom->isItemInRoom(command.getSecondWord());
             if (location < 0 ){
-                output += "Unfortunately, this item is not in this room.\n";
+                output += "Item is not in this room at this specific time.\n";
                 //return output;
             }
             else{
-                output += "This item is in the room!\n";
+                output += "My god! This item is in the room!\n";
                 output += "Index number: " + to_string(location) + "\n";
 
 
@@ -293,10 +287,10 @@ string ZorkUL::processCommand(Command& command, MainWindow *window) {
     else if (compareIgnoreCase(commandWord, "put"))
     {
         if (!command.hasSecondWord()) {
-            //cout << "What the hell do you want to take, punk?!"<< endl;
-            output += "What the hell do you want to put, punk?!\n";
+            //cout << "Are ya trying to take something with ya?!"<< endl;
+            output += "What are you putting on?!\n";
 
-            //            return "What the hell do you want to put, punk?!\n";
+            //            return "What are you putting on?!\n";
         }
         else{
             output += "You're trying to put " + command.getSecondWord() + "\n";
@@ -304,7 +298,7 @@ string ZorkUL::processCommand(Command& command, MainWindow *window) {
 
 
             if(location == -1){
-                output += "Item not in inventory.";
+                output += "Item is not in inventory, sorry.";
             }
             else{
                 // Adding to player's inventory and removing from the room
@@ -334,9 +328,9 @@ string ZorkUL::processCommand(Command& command, MainWindow *window) {
     else if(compareIgnoreCase(commandWord, "check")){
 
         if(!command.hasSecondWord()){
-            output += "What do you want to check, punk??\n";
+            output += "What are ya checkin?!\n";
 
-            //            return "What do you want to check, punk??\n";
+            //            return "What are ya checkin?!\n";
         }
         else{
             string secondWord = command.getSecondWord();
@@ -354,9 +348,9 @@ string ZorkUL::processCommand(Command& command, MainWindow *window) {
 
     else if (compareIgnoreCase(commandWord, "quit")) {
         if (command.hasSecondWord())
-            output += "Overdefined input. If you want to quit, please type 'quit' in the input console or click the 'quit' button.";
+            output += "If you're looking to quit, type 'quit' in the input console or click the 'quit' button.";
 
-        //            return "Overdefined input. If you want to quit, please type 'quit' in the input console or click the 'quit' button.";
+        //            return "If you're looking to quit, type 'quit' in the input console or click the 'quit' button";
         else{
             ZorkUL::deleteAll();
         }
@@ -383,11 +377,11 @@ string ZorkUL::printAllItems(){
     string output = "";
 
     if(itemsInInventory.size() <= 0){
-        output += "You have no items!\n";
+        output += "Theres no items!\n";
         return output;
     }
 
-    output += "Here are all the items currently in your inventory: ";
+    output += "These are the items you have at the moment: ";
 
     for(int i = 0; i < (int) itemsInInventory.size() - 1; i++){
         output += itemsInInventory.at(i)->getShortDescription();
@@ -411,12 +405,12 @@ bool ZorkUL::goRoom(Command command) {
 
     Room* previousRoom = currentRoom;
 
-    if(compareIgnoreCase(direction, "paradise") && canGoToParadise){
-        Room *paradise = new Room(&(InteractFunctions::interactParadise), "Paradise", RoomDialogues::paradise, Constants::PARADISE);
-        paradise->setExits(NULL, NULL, NULL, NULL);
-        allRooms.push_back(paradise);
+    if(compareIgnoreCase(direction, "space") && canGoToSpace){
+        Room *space = new Room(&(InteractFunctions::interactParadise), "Space", RoomDialogues::space, Constants::SPACE);
+        space->setExits(NULL, NULL, NULL, NULL);
+        allRooms.push_back(space);
 
-        currentRoom = paradise;
+        currentRoom = space;
         return true;
     }
 
@@ -457,8 +451,8 @@ void ZorkUL::updateRoom(Room *room, MainWindow *window){
     window->updateBackground(room->getBackgroundPath());
 
     if((room->getTypeOfRoom() & Room::WORDLE) == Room::WORDLE){
-        WordleEngine::initialiseWordleEngine();
-        WordleEngine::startWordleGame();
+        WordleMachine::initialiseWordleMachine();
+        WordleMachine::startWordleGame();
     }
 }
 
@@ -496,10 +490,10 @@ string ZorkUL::giveReward(){
             RewardRoom* rewardRoom = dynamic_cast<RewardRoom*>(currentRoom);
 
             switch(rewardRoom->rewardType){
-            case RewardRoom::MONEY : {
-                int rewardMoney = rewardRoom->giveMoneyReward();
-                output += "Congratulations! You have received $" + to_string(rewardMoney) + "!\n";
-                ZorkUL::changeMoney(rewardMoney);
+            case RewardRoom::CASH: {
+                int rewardCash = rewardRoom->giveCashReward();
+                output += "Congrats! You have got a bitta cash" + to_string(rewardCash) + "!\n";
+                ZorkUL::changeCash(rewardCash);
                 break;
             }
 
@@ -519,7 +513,7 @@ string ZorkUL::giveReward(){
         goalRoom->setGoalStatus(true);
     }
     else{
-        output += "Damn, it looks like this room isn't a goal room.\n";
+        output += "No good! I guess this room isn't a goal room.\n";
     }
 
 
@@ -527,16 +521,16 @@ string ZorkUL::giveReward(){
     return output;
 }
 
-void ZorkUL::changeMoney(int moneyAmount){
-    ZorkUL::money += moneyAmount;
+void ZorkUL::changeCash(int cashAmount){
+    ZorkUL::cash += cashAmount;
 }
 
-int ZorkUL::getMoney(){
-    return ZorkUL::money;
+int ZorkUL::getCash(){
+    return ZorkUL::cash;
 }
 
-int ZorkUL::getGoalMoney(){
-    return ZorkUL::goalMoney;
+int ZorkUL::getGoalCash(){
+    return ZorkUL::goalCash;
 }
 
 Room *ZorkUL::getCurrentRoom(){
@@ -595,6 +589,6 @@ bool ZorkUL::compareIgnoreCase(string a, string b){
     return true;
 }
 
-void ZorkUL::enableParadise(){
-    canGoToParadise = true;
+void ZorkUL::enableSpace(){
+    canGoToSpace = true;
 }
