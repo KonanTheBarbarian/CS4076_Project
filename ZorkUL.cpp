@@ -110,15 +110,15 @@ vector<Room*> ZorkUL::createRooms()  {
             *saturn;
     GoalRoom *uranus, *neptune, *pluto;
 
-    Item *frog, *weird_magazine, *pen;
-    frog = new Item(&(useItemDefault), "Frog", ItemDialogues::frog);
-    weird_magazine = new Item(&(useItemDefault), "Weird Magazine", ItemDialogues::weirdMagazine);
-    pen = new Item(&(useItemDefault),"Pen", ItemDialogues::pen);
+    Item *rock, *sweets, *stylus;
+    rock = new Item(&(useItemDefault), "Rock", ItemDialogues::rock);
+    sweets = new Item(&(useItemDefault), "Sweets", ItemDialogues::sweets);
+    stylus = new Item(&(useItemDefault),"Stylus", ItemDialogues::stylus);
 
     vector<Room*> allRooms;
     // Adding all rooms
-    city_centre = new Room("City Centre", RoomDialogues::cityCentre, NIGHT_CITY_GIF);
-    sewer_a = new WordleRoom(&(interactPlainGoal), 100, "Sewers", RoomDialogues::sewers, SEWER_GIF);
+    mercury = new Room("Mercury", RoomDialogues::mercury, MERCURY_PIC
+    solar_systeactPlainGoal), 100, "Sewers", RoomDialogues::sewers, SEWER_GIF);
     train = new WordleRoom(&(interactPlainGoal), pen, "Train", RoomDialogues::train, TRAIN_GIF);
     train_station = new GoalRoom(&(interactPlainGoal), &(checkFinalGoalFunc),"Station", "", STATION_PIC);
     pei_street = new GoalRoom(&(interactPlainGoal), &(checkPeiCompleteFunc),"Pei Street", "The northern street.", BUSY_STREET);
